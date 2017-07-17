@@ -43,10 +43,12 @@ class App extends React.Component {
     }
     clickend(){
         var array=['a','b','c'];
+        TimerMixin.clearTimeout(this.timer);
         this.setState({
             touched:false,
             data:array[this.state.counter-1]
         })
+
 
     }
     clearTimeout () {
