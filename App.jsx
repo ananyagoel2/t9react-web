@@ -1,72 +1,68 @@
 import React from 'react';
 
+import TimerMixin from 'react-timer-mixin';
+var timer;
 class App extends React.Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            data: '',
-            keyval:0,
-            pressedstring:'',
-            curTime:''
+           touched:false,
+            data:'',
+            counter:0
         }
 
-        this.setNewNumber = this.setNewNumber.bind(this);
-        this.settingState = this.settingState.bind(this)
+        this.clickstart = this.clickstart.bind(this)
+        this.clickend = this.clickend.bind(this)
+        this.longPress = this.longPress.bind(this)
+        this.clearTimeout = this.clearTimeout.bind(this)
+
+
     };
 
-    componentWillMount(){
-        console.log("will")
-        let timems = (new Date).getTime();
-        this.setState({
-            curTime:timems,
-            keyval:0,
+    clickstart(){
+        if(!this.state.touched){
+            this.setState({
+                touched:true,
+                counter:(this.state.counter+1)%4,
+            });
+            TimerMixin.clearTimeout(this.timer);
+            this.timer =TimerMixin.setTimeout(this.longPress,2000)
+        }
 
+
+    }
+    longPress(){
+        console.log("this is a long press")
+        this.setState({
+            touched:false,
+            data:'1',
+            counter:0
+        })
+    }
+    clickend(){
+        var array=['a','b','c'];
+        this.setState({
+            touched:false,
+            data:array[this.state.counter-1]
         })
 
     }
-
-    settingState(){
-         console.log("here")
-        this.forceUpdate();
-
-    }
-
-    setNewNumber() {
-        let key1=['a', 'b', 'c','1'];
-        let timemsupdated = (new Date).getTime();
-
-        console.log(timemsupdated-this.state.curTime);
-
-        if (timemsupdated-this.state.curTime>1500){
-
-            this.setState({
-                data: 'a',
-                keyval:0,
-                pressedstring:this.state.pressedstring+key1[this.state.keyval],
-                curTime:timemsupdated
-            })
-        }
-        else {
-            let value = ((this.state.keyval + 1)% 4);
-            this.setState({
-                data: key1[value],
-                keyval:value,
-                pressedstring:this.state.pressedstring,
-                curTime:timemsupdated
-            })
-        }
-    this.settingState()
+    clearTimeout () {
+        window.clearTimeout(timer);
     }
 
 
     render() {
         return (
             <div   style={back}>
-                <Content myNumber = {this.state.data}></Content>
-                <StringTyped stringtyped={this.state.pressedstring}></StringTyped>
-               <button style = {divStyle} onClick = {this.setNewNumber} >abc1</button>
+                <Content myNumber = {this.state.data} ></Content>
+               <button style = {divStyle}
+                        onMouseDown={this.clickstart}
+                        onMouseUp={this.clickend}
+
+               >abc1</button>
             </div>
         );
     }
@@ -78,17 +74,6 @@ class Content extends React.Component {
         return (
             <div >
                <h3>Typed Number: {this.props.myNumber}</h3>
-            </div>
-        );
-    }
-}
-class StringTyped extends React.Component {
-
-
-    render() {
-        return (
-            <div>
-                <h3>Typed String: {this.props.stringtyped}</h3>
             </div>
         );
     }

@@ -5,7 +5,7 @@
   "main": "index.js",
   "start": "webpack-dev-server --hot",
   "scripts": {
-      "start": "webpack-dev-server --hot",
+    "start": "webpack-dev-server --hot",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -21,6 +21,7 @@
     "babel-preset-react": "^6.24.1",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
+    "react-timer-mixin": "^0.13.3",
     "webpack": "^3.2.0",
     "webpack-dev-server": "^2.5.1"
   }
